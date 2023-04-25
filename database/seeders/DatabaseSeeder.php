@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
+use App\Models\Person;
 use Illuminate\Database\Seeder;
 use App\Models\Enterprise;
 
@@ -14,6 +16,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         Enterprise::factory(10)->create();
+        $persons = Person::factory(10)->create();
+        foreach ($persons as $person){
+            $enterprise = Enterprise::factory(1)->create();
+            $person->enterprises()->sync($enterprise);
+
+            $address = Address::factory(1)->create();
+            $person->address()->save($address->first());
+        }
     }
 }

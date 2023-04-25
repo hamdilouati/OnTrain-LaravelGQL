@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Enterprise extends Model {
     use HasFactory;
 
+    protected $casts=[
+        'registered_at'=>'datetime:Y-m-d'
+    ];
+    protected $guarded = [];
+
     public function persons(): BelongsToMany {
         return $this->belongsToMany(Person::class)
             ->withPivot('role','from_date',

@@ -41,6 +41,9 @@ class CreateEnterprisesTable extends Migration
      */
     public function down()
     {
+        Schema::table('enterprise_person', function(Blueprint $table) {
+            $table->dropForeign(['enterprise_id']);
+        });
         Schema::dropIfExists('enterprises');
         Schema::dropIfExists('enterprise_person');
     }
