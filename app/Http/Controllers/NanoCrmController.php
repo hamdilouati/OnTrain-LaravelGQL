@@ -12,5 +12,10 @@ class NanoCrmController extends Controller
         $fullname = $firstname.' '.$lastname;
         return New Response($fullname, 200);
     }
+
+    public function show(Int $id): String {
+        dd('6: NanoCrmController');
+        return ';-) Voici le profil de la personne : '.$id;
+    }
 }
 

@@ -16,3 +16,8 @@ Route::get('/', function () {
 
 Route::get('/fullname/{firstname}/{lastname?}', 'NanoCrmController@fullname')->name('nanocrm.fullname');
 
+Route::get('/person/{id}', function(){
+    //Décommenter la route ci-dessus, la dernière route qui matche est exécutée
+    dd('4: routes/web.php');
+});
+//Route::get('/person/{id}', 'NanoCrmController@show')->name('nanocrm.person.show')->middleware('check');
