@@ -1,41 +1,95 @@
-"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
-scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
-"Indicates what fields are available at the top level of a query operation."
-type Query {
-    "Find a single user by an identifying attribute."
-    user(
-      "Search by primary key."
-      id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
-
-      "Search by email address."
-      email: String @eq @rules(apply: ["prohibits:id", "required_without:id", "email"])
-    ): User @find
-
-    "List multiple users."
-    users(
-      "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
-      name: String @where(operator: "like")
-    ): [User!]! @paginate(defaultCount: 10)
-}
-
-"Account of a person who utilizes this application."
 type User {
-    "Unique primary key."
     id: ID!
-
-    "Non-unique name."
     name: String!
-
-    "Unique email address."
     email: String!
-
-    "When the email was verified."
-    email_verified_at: DateTime
-
-    "When the account was created."
-    created_at: DateTime!
-
-    "When the account was last updated."
-    updated_at: DateTime!
+    email_verified_at: String
+    created_at: String!
+    updated_at: String!
 }
+
+type Person {
+    id: ID!
+    firstname: String!
+    lastname: String!
+    email: String!
+    date_of_birth: String!
+    phone: String!
+    address: Address
+    skills: [Skill!]!
+    enterprises: [EnterprisePerson!]!
+    created_at: String!
+    updated_at: String!
+}
+
+type Address {
+    id: ID!
+    address: String!
+    postal_code: String!
+    city: String!
+    country: String!
+    person: Person!
+    created_at: String!
+    updated_at: String!
+}
+
+type Skill {
+    id: ID!
+    title: String!
+    description: String
+    experience: Int
+    person: Person!
+    created_at: String!
+    updated_at: String!
+}
+
+type Enterprise {
+    id: ID!
+    name: String!
+    registered_at: String!
+    persons: [EnterprisePerson!]!
+    created_at: String!
+    updated_at: String!
+}
+
+type EnterprisePerson {
+    role: String!
+    from_date: String!
+    to_date: String
+    description: String
+    person: Person!
+    enterprise: Enterprise!
+}
+
+
+type Query {
+    user(id: ID!): User @field(resolver: "GraphQL\\Resolvers\\QueryResolver@user")
+    persons: [Person!]! @field(resolver: "GraphQL\\Resolvers\\QueryResolver@persons")
+    person(id: ID!): Person @field(resolver: "GraphQL\\Resolvers\\QueryResolver@person")
+    addresses: [Address!]! @field(resolver: "GraphQL\\Resolvers\\QueryResolver@addresses")
+    address(id: ID!): Address @field(resolver: "GraphQL\\Resolvers\\QueryResolver@address")
+    skills: [Skill!]! @field(resolver: "GraphQL\\Resolvers\\QueryResolver@skills")
+    skill(id: ID!): Skill @field(resolver: "GraphQL\\Resolvers\\QueryResolver@skill")
+    enterprises: [Enterprise!]! @field(resolver: "GraphQL\\Resolvers\\QueryResolver@enterprises")
+    enterprise(id: ID!): Enterprise @field(resolver: "GraphQL\\Resolvers\\QueryResolver@enterprise")
+
+}
+
+type Mutation {
+    createUser(name: String!, email: String!, password: String!): User! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@createUser")
+    createPerson(firstname: String!, lastname: String!, email: String!, date_of_birth: String!, phone: String): Person! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@createPerson")
+    deletePerson(id: ID!): Person! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@deletePerson")
+    updatePerson(id: ID!, firstname: String, lastname: String, email: String, date_of_birth: String, phone: String): Person! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@updatePerson")
+    createAddress(address: String!, postal_code: String!, city: String!, country: String!, person_id: ID!): Address! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@createAddress")
+    updateAddress(id: ID!, address: String, postal_code: String, city: String, country: String, person_id: ID): Address! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@updateAddress")
+    deleteAddress(id: ID!): Address! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@deleteAddress")
+    createSkill(title: String!, description: String!,experience: Int, person_id: ID!): Skill! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@createSkill")
+    updateSkill(title: String!, description: String!,experience: Int, person_id: ID): Skill! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@updateSkill")
+    deleteSkill(id: ID!): Skill! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@deleteSkill")
+    createEnterprise(name: String!, registered_at: String!): Enterprise! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@createEnterprise")
+    updateEnterprise(id: ID!, name: String, registered_at: String): Enterprise! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@updateEnterprise")
+    deleteEnterprise(id: ID!): Enterprise! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@deleteEnterprise")
+    assignPersonsToEnterprise(enterprise_id: ID!, person_ids: [ID!]!): [EnterprisePerson!]! @field(resolver: "GraphQL\\Resolvers\\MutationResolver@assignPersonsToEnterprise")
+}
+
+

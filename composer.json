@@ -11,6 +11,7 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "mll-lab/laravel-graphql-playground": "^2.6",
         "nuwave/lighthouse": "^5.71"
     },
     "require-dev": {
@@ -25,7 +26,8 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+            "GraphQL\\": "graphql/"
         }
     },
     "autoload-dev": {
