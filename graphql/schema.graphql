@@ -64,6 +64,7 @@ type EnterprisePerson {
 
 type Query {
     user(id: ID!): User @field(resolver: "GraphQL\\Resolvers\\QueryResolver@user")
+    users: [User!]! @field(resolver: "GraphQL\\Resolvers\\QueryResolver@users")
     persons: [Person!]! @field(resolver: "GraphQL\\Resolvers\\QueryResolver@persons")
     person(id: ID!): Person @field(resolver: "GraphQL\\Resolvers\\QueryResolver@person")
     addresses: [Address!]! @field(resolver: "GraphQL\\Resolvers\\QueryResolver@addresses")
